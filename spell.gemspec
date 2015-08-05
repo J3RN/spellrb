@@ -7,7 +7,7 @@ Gem::Specification.new do |spec|
   spec.name          = "spell"
   spec.version       = Spell::VERSION
   spec.authors       = ["Jonathan Arnett"]
-  spec.email         = ["JArnett@covermymeds.com"]
+  spec.email         = ["jonarnett90@gmail.com"]
 
   spec.summary       = %q{A customizable spell checker, written in pure Ruby }
   spec.description   = %q{Spell checker written in pure Ruby, implementing a simple bigram comparison algorithm. Spell has no external dependencies (including aspell or ispell). }

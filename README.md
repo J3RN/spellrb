@@ -25,7 +25,7 @@ The spell initializer can take one or two arguments.
 If you do not care about using the word usage, you can simply write:
 ```ruby
 word_list = ["alpha", "beta"]
-spell = Spell.new(word_list)
+spell = Spell::Spell.new(word_list)
 spell.best_match('alphabet')  #=> "alpha"
 ```
 
@@ -36,14 +36,14 @@ The default for the word usage weight (internally termed "alpha") is 0.3. This v
 If you want to accept the default weight, you can simply write:
 ```ruby
 word_list = { "alpha" => 2, "beta" => 20 }
-spell = Spell.new(word_list)
+spell = Spell::Spell.new(word_list)
 spell.best_match('alphabet')  #=> "alpha"
 ```
 
 Or, if you'd rather specify a custom word weight, you can specify it like this:
 ```ruby
 word_list = { "alpha" => 8, "beta" => 2 }
-spell = Spell.new(word_list, 0.5)
+spell = Spell::Spell.new(word_list, 0.5)
 spell.best_match('alphabet')  #=> "beta"
 ```
 
@@ -51,7 +51,7 @@ Other than the `best_match` method, shown above, there is also a method `compare
 
 ```ruby
 word_list = ["alpha", "beta"]
-spell = Spell.new(word_list)
+spell = Spell::Spell.new(word_list)
 spell.compare('alpha', 'alphabet')  #=> 0.5714285714285714 (4 / 7)
 ```
 

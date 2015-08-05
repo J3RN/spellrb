@@ -5,7 +5,7 @@ require 'spell/version'
 
 Gem::Specification.new do |spec|
   spec.name          = "spell"
-  spec.version       = SpEll::VERSION
+  spec.version       = Spell::VERSION
   spec.authors       = ["Jonathan Arnett"]
   spec.email         = ["JArnett@covermymeds.com"]
 

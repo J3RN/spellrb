@@ -1,5 +1,4 @@
 require "spell/version"
+require "spell/spell"
 
-module Spell
-  # Your code goes here...
-end
+module SpEll; end

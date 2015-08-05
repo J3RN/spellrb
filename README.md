@@ -1,8 +1,6 @@
 # Spell
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/spell`. To experiment with that code, run `bin/console` for an interactive prompt.
-
-TODO: Delete this and the text above, and describe your gem
+Spell checker written in pure Ruby, implementing a simple bigram comparison algorithm. Spell has no external dependencies (including aspell or ispell).
 
 ## Installation
 
@@ -22,17 +20,50 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+The spell initializer can take one or two arguments.
+
+If you do not care about using the word usage, you can simply write:
+```ruby
+word_list = ["alpha", "beta"]
+spell = Spell.new(word_list)
+spell.best_match('alphabet')  #=> "alpha"
+```
+
+If you want to include word usage in the best match calculation, you must provide a hash where the keys are the words and the values are the corresponding word counts.
+
+The default for the word usage weight (internally termed "alpha") is 0.3. This value should be in the range 0.0-1.0, where 0.0 means the word usage does not affect the output, whereas 1.0 means the most used word is always returned.
+
+If you want to accept the default weight, you can simply write:
+```ruby
+word_list = { "alpha" => 2, "beta" => 20 }
+spell = Spell.new(word_list)
+spell.best_match('alphabet')  #=> "alpha"
+```
+
+Or, if you'd rather specify a custom word weight, you can specify it like this:
+```ruby
+word_list = { "alpha" => 8, "beta" => 2 }
+spell = Spell.new(word_list, 0.5)
+spell.best_match('alphabet')  #=> "beta"
+```
+
+Other than the `best_match` method, shown above, there is also a method `compare`, which returns the how similar two words are, based on shared, order-consistent bigrams compared to the maximum number of bigrams of the two words.
+
+```ruby
+word_list = ["alpha", "beta"]
+spell = Spell.new(word_list)
+spell.compare('alpha', 'alphabet')  #=> 0.5714285714285714 (4 / 7)
+```
 
 ## Development
 
-After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake false` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
+After checking out the repo, run `bin/setup` to install dependencies. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
 
 To install this gem onto your local machine, run `bundle exec rake install`. To release a new version, update the version number in `version.rb`, and then run `bundle exec rake release`, which will create a git tag for the version, push git commits and tags, and push the `.gem` file to [rubygems.org](https://rubygems.org).
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/spell. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [Contributor Covenant](contributor-covenant.org) code of conduct.
+Bug reports and pull requests are welcome on GitHub at https://github.com/J3RN/spellrb. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [Contributor Covenant](contributor-covenant.org) code of conduct.
 
 
 ## License

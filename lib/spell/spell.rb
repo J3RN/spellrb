@@ -7,15 +7,11 @@ module Spell
         @word_list = args[0]
         @alpha = args[1] || 0.3
       elsif args[0].is_a? Array
+        fail "Word usage weights do not make sense with an Array" if args[1]
         @word_list = args[0]
       else
         fail "First argument must be an Array or Hash"
       end
-    end
-
-    # Return a value from 0.0-1.0 of how similar these two words are
-    def compare(word1, word2)
-      bigram_compare(bigramate(word1), bigramate(word2))
     end
 
     # Returns the closest matching word in the dictionary
@@ -31,6 +27,20 @@ module Spell
       word_hash = apply_usage_weights(word_hash) if @word_list.is_a? Hash
 
       word_hash.max_by { |key, value| value }.first
+    end
+
+    # Returns a boolean for whether or not 'word' is in the dictionary
+    def spelled_correctly?(word)
+      if @word_list.is_a? Hash
+        @word_list.keys.include?(word)
+      else
+        @word_list.include?(word)
+      end
+    end
+
+    # Return a value from 0.0-1.0 of how similar these two words are
+    def compare(word1, word2)
+      bigram_compare(bigramate(word1), bigramate(word2))
     end
 
     private
@@ -85,16 +95,6 @@ module Spell
       end
 
       weighted_array.to_h
-    end
-
-    # Returns a boolean for whether or not 'word' is in the dictionary
-    def spelled_good?(word)
-      @word_list.keys.include?(word)
-    end
-
-    # Increment count on each utterance
-    def add_count(word)
-      @word_list[word] += 1
     end
   end
 end

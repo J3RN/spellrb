@@ -42,7 +42,7 @@ spell.best_match('alphabet')  #=> "alpha"
 
 Or, if you'd rather specify a custom word weight, you can specify it like this:
 ```ruby
-word_list = { "alpha" => 8, "beta" => 2 }
+word_list = { "alpha" => 2, "beta" => 20 }
 spell = Spell::Spell.new(word_list, 0.5)
 spell.best_match('alphabet')  #=> "beta"
 ```

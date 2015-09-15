@@ -1,0 +1,18 @@
+#!/usr/bin/env ruby
+
+require "bundler/setup"
+require "ruby-prof"
+require "spell"
+
+RubyProf.start
+
+puts "Hello wordl"
+
+result = RubyProf.stop
+printer = RubyProf::GraphHtmlPrinter.new(result)
+file_name = "profile/#{Time.now.strftime('%Y%m%d%H%M%S%L')}.html"
+printer.print(File.open(file_name, "w+"))
+
+if `uname`.include? "Darwin"
+  Kernel.system("open #{file_name}")
+end

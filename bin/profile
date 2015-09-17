@@ -6,7 +6,10 @@ require "spell"
 
 RubyProf.start
 
-puts "Hello wordl"
+words = File.read("enable1.txt").split("\n")
+spell = Spell::Spell.new(words)
+
+spell.best_match("aligator")
 
 result = RubyProf.stop
 printer = RubyProf::GraphHtmlPrinter.new(result)

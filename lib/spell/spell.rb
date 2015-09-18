@@ -22,7 +22,7 @@ module Spell
       word_hash = words.map do |key|
         [key, bigram_compare(word_bigrams, bigramate(key))]
       end
-      word_hash = Hash[*word_hash.flatten]
+      word_hash = Hash[word_hash]
 
       # Weight by word usage, if logical
       word_hash = apply_usage_weights(word_hash) if @word_list.is_a? Hash
@@ -95,7 +95,7 @@ module Spell
         [word, (bigram_score * (1 - @alpha)) + (usage_score * @alpha)]
       end
 
-      Hash[*weighted_array.flatten]
+      Hash[weighted_array]
     end
   end
 end

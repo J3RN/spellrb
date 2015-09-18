@@ -10,6 +10,7 @@ words = File.read("enable1.txt").split("\n")
 spell = Spell::Spell.new(words)
 
 spell.best_match("aligator")
+spell.best_match("sentence")
 
 result = RubyProf.stop
 printer = RubyProf::GraphHtmlPrinter.new(result)

@@ -1,21 +1,19 @@
 #!/usr/bin/env ruby
 
-require "bundler/setup"
-require "ruby-prof"
-require "spell"
+require 'bundler/setup'
+require 'ruby-prof'
+require 'spell'
 
 RubyProf.start
 
-words = File.read("enable1.txt").split("\n")
+words = File.read('enable1.txt').split("\n")
 spell = Spell::Spell.new(words)
 
-spell.best_match("aligator")
+spell.best_match('aligator')
 
 result = RubyProf.stop
 printer = RubyProf::GraphHtmlPrinter.new(result)
 file_name = "profile/#{Time.now.strftime('%Y%m%d%H%M%S%L')}.html"
-printer.print(File.open(file_name, "w+"))
+printer.print(File.open(file_name, 'w+'))
 
-if `uname`.include? "Darwin"
-  Kernel.system("open #{file_name}")
-end
+Kernel.system("open #{file_name}") if `uname`.include? 'Darwin'

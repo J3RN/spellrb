@@ -1,2 +1,2 @@
-require "spell/version"
-require "spell/spell"
+require 'spell/version'
+require 'spell/spell'

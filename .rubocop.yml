@@ -1,0 +1,4 @@
+Style/Documentation:
+  Exclude:
+    - 'lib/spell/spell.rb'
+    - 'lib/spell/version.rb'

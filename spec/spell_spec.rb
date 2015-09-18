@@ -43,7 +43,7 @@ describe 'Spell' do
     include_context 'with a hash'
 
     it 'returns the correct decimal value' do
-      expect(subject.compare('hello', 'shallow')).to eq(1.0/3)
+      expect(subject.compare('hello', 'shallow')).to eq(1.0 / 3)
     end
   end
 end

@@ -1,16 +1,16 @@
 module Spell
   class Spell
     def initialize(*args)
-      fail "Too many arguments given" if args.count > 3
+      fail 'Too many arguments given' if args.count > 3
 
       if args[0].is_a? Hash
         @word_list = args[0]
         @alpha = args[1] || 0.3
       elsif args[0].is_a? Array
-        fail "Word usage weights do not make sense with an Array" if args[1]
+        fail 'Word usage weights do not make sense with an Array' if args[1]
         @word_list = args[0]
       else
-        fail "First argument must be an Array or Hash"
+        fail 'First argument must be an Array or Hash'
       end
     end
 
@@ -27,7 +27,7 @@ module Spell
       # Weight by word usage, if logical
       word_hash = apply_usage_weights(word_hash) if @word_list.is_a? Hash
 
-      word_hash.max_by { |key, value| value }.first
+      word_hash.max_by { |_key, value| value }.first
     end
 
     # Returns a boolean for whether or not 'word' is in the dictionary
@@ -48,12 +48,12 @@ module Spell
 
     # Returns the number of matching bigrams between the two sets of bigrams
     def num_matching(one_bigrams, two_bigrams, acc = 0)
-      return acc if (one_bigrams.empty? || two_bigrams.empty?)
+      return acc if one_bigrams.empty? || two_bigrams.empty?
 
       one_two = one_bigrams.index(two_bigrams[0])
       two_one = two_bigrams.index(one_bigrams[0])
 
-      if (one_two.nil? && two_one.nil?)
+      if one_two.nil? && two_one.nil?
         num_matching(one_bigrams.drop(1), two_bigrams.drop(1), acc)
       else
         # If one is nil, it is set to the other
@@ -61,9 +61,11 @@ module Spell
         one_two ||= two_one
 
         if one_two < two_one
-          num_matching(one_bigrams.drop(one_two + 1), two_bigrams.drop(1), acc + 1)
+          num_matching(one_bigrams.drop(one_two + 1),
+                       two_bigrams.drop(1), acc + 1)
         else
-          num_matching(one_bigrams.drop(1), two_bigrams.drop(two_one + 1), acc + 1)
+          num_matching(one_bigrams.drop(1),
+                       two_bigrams.drop(two_one + 1), acc + 1)
         end
       end
     end
@@ -73,7 +75,8 @@ module Spell
       (0..(word.length - 2)).map { |i| word.slice(i, 2) }
     end
 
-    # Returns a value from 0 to 1 for how likely these two words are to be a match
+    # Returns a value from 0 to 1 for how likely these two words are to be a
+    # match
     def bigram_compare(word1_bigrams, word2_bigrams)
       most_bigrams = [word1_bigrams.count, word2_bigrams.count].max
       num_matching(word1_bigrams, word2_bigrams).to_f / most_bigrams

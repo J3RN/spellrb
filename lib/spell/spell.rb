@@ -1,42 +1,32 @@
 module Spell
   class Spell
-    def initialize(*args)
-      fail 'Too many arguments given' if args.count > 3
-
-      if args[0].is_a? Hash
-        @word_list = args[0]
-        @alpha = args[1] || 0.3
-      elsif args[0].is_a? Array
-        fail 'Word usage weights do not make sense with an Array' if args[1]
-        @word_list = args[0]
-      else
-        fail 'First argument must be an Array or Hash'
+    def initialize(word_hash, alpha = 0.3)
+      proto_word_list = word_hash.map do |word, usage|
+        [word, { usage: usage, bigrams: bigramate(word) }]
       end
+
+      @max_usage = word_hash.values.max.to_f
+      @max_usage = 1 if @max_usage == 0
+
+      @word_list = Hash[proto_word_list]
+      @alpha = alpha
     end
 
     # Returns the closest matching word in the dictionary
     def best_match(given_word)
-      words = (@word_list.is_a? Array) ? @word_list : @word_list.keys
-
       word_bigrams = bigramate(given_word)
-      word_hash = words.map do |key|
-        [key, bigram_compare(word_bigrams, bigramate(key))]
+      word_hash = @word_list.map do |key, info|
+        [key, bigram_compare(word_bigrams, info[:bigrams])]
       end
       word_hash = Hash[word_hash]
 
-      # Weight by word usage, if logical
-      word_hash = apply_usage_weights(word_hash) if @word_list.is_a? Hash
-
+      word_hash = apply_usage_weights(word_hash)
       word_hash.max_by { |_key, value| value }.first
     end
 
     # Returns a boolean for whether or not 'word' is in the dictionary
     def spelled_correctly?(word)
-      if @word_list.is_a? Hash
-        @word_list.keys.include?(word)
-      else
-        @word_list.include?(word)
-      end
+      @word_list.keys.include?(word)
     end
 
     # Return a value from 0.0-1.0 of how similar these two words are
@@ -90,11 +80,8 @@ module Spell
     # s is the bigram score (0..1)
     # u is the usage score (0..1)
     def apply_usage_weights(word_hash)
-      max_usage = @word_list.values.max.to_f
-      max_usage = 1 if max_usage == 0
-
       weighted_array = word_hash.map do |word, bigram_score|
-        usage_score = @word_list[word].to_f / max_usage
+        usage_score = @word_list[word][:usage].to_f / @max_usage
         [word, (bigram_score * (1 - @alpha)) + (usage_score * @alpha)]
       end
 

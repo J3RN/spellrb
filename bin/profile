@@ -14,7 +14,8 @@ spell.best_match("sentence")
 
 result = RubyProf.stop
 printer = RubyProf::GraphHtmlPrinter.new(result)
-file_name = "profile/#{Time.now.strftime('%Y%m%d%H%M%S%L')}.html"
+branch = `git symbolic-ref --short HEAD`.chomp
+file_name = "profile/#{Time.now.strftime('%Y%m%d%H%M%S%L')}-#{branch}.html"
 printer.print(File.open(file_name, 'w+'))
 
 Kernel.system("open #{file_name}") if `uname`.include? 'Darwin'

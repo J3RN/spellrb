@@ -4,18 +4,20 @@ require 'bundler/setup'
 require 'ruby-prof'
 require 'spell'
 
-words = File.read('enable1.txt').split("\n")
-spell = Spell::Spell.new(Hash[words.map { |x| [x, 0] }])
+5.times do
+  words = File.read('enable1.txt').split("\n")
+  spell = Spell::Spell.new(Hash[words.map { |x| [x, 0] }])
 
-RubyProf.start
+  RubyProf.start
 
-spell.best_match('aligator')
-spell.best_match('sentence')
+  spell.best_match('aligator')
+  spell.best_match('sentence')
 
-result = RubyProf.stop
-printer = RubyProf::GraphHtmlPrinter.new(result)
-branch = `git symbolic-ref --short HEAD`.chomp
-file_name = "profile/#{Time.now.strftime('%Y%m%d%H%M%S%L')}-#{branch}.html"
-printer.print(File.open(file_name, 'w+'))
+  result = RubyProf.stop
+  printer = RubyProf::GraphHtmlPrinter.new(result)
+  branch = `git symbolic-ref --short HEAD`.chomp
+  file_name = "profile/#{Time.now.strftime('%Y%m%d%H%M%S%L')}-#{branch}.html"
+  printer.print(File.open(file_name, 'w+'))
 
-Kernel.system("open #{file_name}") if `uname`.include? 'Darwin'
+  Kernel.system("open #{file_name}") if `uname`.include? 'Darwin'
+end

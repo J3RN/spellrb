@@ -5,12 +5,12 @@ require 'ruby-prof'
 require 'spell'
 
 words = File.read('enable1.txt').split("\n")
-spell = Spell::Spell.new(words)
+spell = Spell::Spell.new(Hash[words.map { |x| [x, 0] }])
 
 RubyProf.start
 
 spell.best_match('aligator')
-spell.best_match("sentence")
+spell.best_match('sentence')
 
 result = RubyProf.stop
 printer = RubyProf::GraphHtmlPrinter.new(result)

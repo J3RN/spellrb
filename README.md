@@ -22,14 +22,7 @@ Or install it yourself as:
 
 The spell initializer can take one or two arguments.
 
-If you do not care about using the word usage, you can simply write:
-```ruby
-word_list = ["alpha", "beta"]
-spell = Spell::Spell.new(word_list)
-spell.best_match('alphabet')  #=> "alpha"
-```
-
-If you want to include word usage in the best match calculation, you must provide a hash where the keys are the words and the values are the corresponding word counts.
+You must provide a hash where the keys are the words and the values are the corresponding word counts. If you do not care to factor in word counts, the values may all be `0`.
 
 The default for the word usage weight (internally termed "alpha") is 0.3. This value should be in the range 0.0-1.0, where 0.0 means the word usage does not affect the output, whereas 1.0 means the most used word is always returned.
 
@@ -50,7 +43,7 @@ spell.best_match('alphabet')  #=> "beta"
 Other than the `best_match` method, shown above, there is also a method `compare`, which returns the how similar two words are, based on shared, order-consistent bigrams compared to the maximum number of bigrams of the two words.
 
 ```ruby
-word_list = ["alpha", "beta"]
+...
 spell = Spell::Spell.new(word_list)
 spell.compare('alpha', 'alphabet')  #=> 0.5714285714285714 (4 / 7)
 ```

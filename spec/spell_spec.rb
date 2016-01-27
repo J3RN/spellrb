@@ -1,10 +1,19 @@
 require 'spec_helper'
 
 describe 'Spell' do
+  let(:word_hash) { { 'alpha' => 2, 'beta' => 20 } }
+  let(:misspelling) { 'alphabet' }
+  let(:correct)     { 'alpha' }
+
+  subject do
+    Spell::Spell.new(word_hash)
+  end
+
   describe '.best_match' do
     context 'with a hash' do
-      include_context 'with a hash'
-      it_behaves_like 'a spelling corrector'
+      it 'corrects the misspelling' do
+        expect(subject.best_match(misspelling)).to eq(correct)
+      end
 
       context 'with a strong weight' do
         subject do
@@ -20,28 +29,21 @@ describe 'Spell' do
         end
       end
     end
-
-    context 'with an array' do
-      include_context 'with an array'
-      it_behaves_like 'a spelling corrector'
-    end
   end
 
   describe '.spelled_correctly?' do
     context 'with a hash' do
-      include_context 'with a hash'
-      it_behaves_like 'a spell checker'
-    end
+      it 'knows what is spelled correctly' do
+        expect(subject.spelled_correctly? correct).to be true
+      end
 
-    context 'with an array' do
-      include_context 'with an array'
-      it_behaves_like 'a spell checker'
+      it 'knows what is spelled incorrectly' do
+        expect(subject.spelled_correctly? misspelling).to be false
+      end
     end
   end
 
   describe '.compare' do
-    include_context 'with a hash'
-
     it 'returns the correct decimal value' do
       expect(subject.compare('hello', 'shallow')).to eq(1.0 / 3)
     end

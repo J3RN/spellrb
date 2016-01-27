@@ -1,15 +1,22 @@
 module Spell
   class Spell
     def initialize(word_hash, alpha = 0.3)
-      @word_list = word_hash
+      proto_word_list = word_hash.map do |word, usage|
+        [word, { usage: usage, bigrams: bigramate(word) }]
+      end
+
+      @max_usage = word_hash.values.max.to_f
+      @max_usage = 1 if @max_usage == 0
+
+      @word_list = Hash[proto_word_list]
       @alpha = alpha
     end
 
     # Returns the closest matching word in the dictionary
     def best_match(given_word)
       word_bigrams = bigramate(given_word)
-      word_hash = @word_list.map do |key, _usage|
-        [key, bigram_compare(word_bigrams, bigramate(key))]
+      word_hash = @word_list.map do |key, info|
+        [key, bigram_compare(word_bigrams, info[:bigrams])]
       end
       word_hash = Hash[word_hash]
 
@@ -73,11 +80,8 @@ module Spell
     # s is the bigram score (0..1)
     # u is the usage score (0..1)
     def apply_usage_weights(word_hash)
-      max_usage = @word_list.values.max.to_f
-      max_usage = 1 if max_usage == 0
-
       weighted_array = word_hash.map do |word, bigram_score|
-        usage_score = @word_list[word].to_f / max_usage
+        usage_score = @word_list[word][:usage].to_f / @max_usage
         [word, (bigram_score * (1 - @alpha)) + (usage_score * @alpha)]
       end
 

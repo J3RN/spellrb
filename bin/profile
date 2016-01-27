@@ -4,10 +4,10 @@ require 'bundler/setup'
 require 'ruby-prof'
 require 'spell'
 
-RubyProf.start
-
 words = File.read('enable1.txt').split("\n")
 spell = Spell::Spell.new(words)
+
+RubyProf.start
 
 spell.best_match('aligator')
 spell.best_match("sentence")

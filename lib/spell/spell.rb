@@ -17,8 +17,8 @@ module Spell
     # Returns the closest matching word in the dictionary
     def best_match(given_word)
       word_bigrams = bigramate(given_word)
-      word_hash = @word_list.map do |key, info|
-        [key, bigram_compare(word_bigrams, info[:bigrams])]
+      word_hash = @word_list.map do |word, word_attr|
+        [word, bigram_compare(word_bigrams, word_attr[:bigrams])]
       end
       word_hash = Hash[word_hash]
 

@@ -1,14 +1,16 @@
 module Spell
   class Spell
     def initialize(word_hash, alpha = 0.3)
-      proto_word_list = word_hash.map do |word, usage|
-        [word, { usage: usage, bigrams: bigramate(word) }]
-      end
-
+      # Set max usage
       @max_usage = word_hash.values.max.to_f
       @max_usage = 1 if @max_usage == 0
 
+      # Create word list
+      proto_word_list = word_hash.map do |word, usage|
+        [word, { usage: usage, bigrams: bigramate(word) }]
+      end
       @word_list = Hash[proto_word_list]
+
       @alpha = alpha
     end
 

@@ -40,14 +40,14 @@ spell = Spell::Spell.new(word_list)
 spell.best_match('alphabet')  #=> "alpha"
 ```
 
-Or, if you'd rather specify a custom word weight, you can specify it like this:
+Or, if you'd rather specify a custom word usage weight, you can specify it like this:
 ```ruby
 word_list = { "alpha" => 2, "beta" => 20 }
 spell = Spell::Spell.new(word_list, 0.5)
 spell.best_match('alphabet')  #=> "beta"
 ```
 
-Other than the `best_match` method, shown above, there is also a method `compare`, which returns the how similar two words are, based on shared, order-consistent bigrams compared to the maximum number of bigrams of the two words.
+Other than the `best_match` method, shown above, there is also a `compare` method, which returns the how similar two words are, based on shared, order-consistent bigrams compared to the maximum number of bigrams of the two words.
 
 ```ruby
 word_list = ["alpha", "beta"]
